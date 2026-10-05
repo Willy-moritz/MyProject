@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boxy Verse - Digital Workforce Platform</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #10b981;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; padding: 24px 16px; }
+    .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    
+    /* 1. Hero Section */
+    .hero { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .avatar { width: 64px; height: 64px; background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
+    .pulse { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    h1 { font-size: 2.25rem; font-weight: 800; color: #1e293b; letter-spacing: -0.02em; }
+    .tagline { font-size: 1.1rem; color: var(--muted); max-width: 650px; font-weight: 500; }
+
+    /* 2. Problem & Solution */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr !important; } }
+    .chaos-card { border-left: 4px solid var(--danger); }
+    .solution-card { border-left: 4px solid var(--accent); }
+    .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.925rem; color: var(--muted); }
+    li { display: flex; align-items: flex-start; gap: 8px; }
+
+    /* 3. Capabilities */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .cap-card { background: #fafafa; border: 1px solid var(--border); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; }
+    .cap-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+    .tools-tag { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .tag { background: #ffffff; color: #475569; font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--border); font-weight: 500; }
+
+    /* 4. Interactive Simulation */
+    .sim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .scenarios { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .scen-btn { background: #f1f5f9; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+    .scen-btn:hover, .scen-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+    .chat-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; min-height: 150px; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; }
+    .msg { padding: 10px 14px; border-radius: 10px; max-width: 85%; }
+    .msg.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+    .msg.ai { background: #ffffff; color: var(--text); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 2px; }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+    .dot { width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; animation: blink 1.4s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    /* 5. Form & Footer */
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+    label { font-size: 0.85rem; font-weight: 600; color: #334155; }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff; }
+    input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .btn-submit { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; margin-top: 8px; }
+    .btn-submit:hover { background: var(--primary-hover); }
+    footer { text-align: center; font-size: 0.85rem; color: #94a3b8; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 1. HERO SECTION -->
+    <header class="card hero">
+      <div class="avatar">❖</div>
+      <div class="badge"><span class="pulse"></span> Status: Active & Ready 24/7</div>
+      <h1>Boxy Verse</h1>
+      <p class="tagline">"Tim digital yang bekerja, supaya tim Anda bisa berkembang."</p>
+    </header>
+
+    <!-- 2. PROBLEM & SOLUTION CARD -->
+    <section class="grid-2">
+      <div class="card chaos-card">
+        <div class="card-title" style="color:var(--danger)">⚠️ The Chaos</div>
+        <ul>
+          <li><span>•</span> Pekerjaan repetitif menyita waktu produktif tim Anda.</li>
+          <li><span>•</span> Adopsi AI terasa abstrak, rumit, & berisiko bagi operasional.</li>
+          <li><span>•</span> Bingung memilih solusi yang tepat dan estimasi biayanya.</li>
+        </ul>
+      </div>
+      <div class="card solution-card">
+        <div class="card-title" style="color:var(--accent)">🚀 The Solution</div>
+        <ul>
+          <li><span>•</span> Kantor Virtual AI mengerjakan tugas HRD, Finance, Sales, & Marketing.</li>
+          <li><span>•</span> Workflow terkontrol dengan integrasi Human-in-the-Loop.</li>
+          <li><span>•</span> Implementasi cepat, biaya terukur, dan berdampak langsung.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. CORE CAPABILITIES -->
+    <section class="card">
+      <div class="card-title">⚡ Core Capabilities & Integrated Tools</div>
+      <div class="grid-3" style="margin-top:12px;">
+        <div class="cap-card">
+          <div>
+            <h3>HRD & Operations</h3>
+            <p style="font-size:0.875rem; color:var(--muted);">Screening CV otomatis, penjadwalan interview, dan koordinasi internal.</p>
+          </div>
+          <div class="tools-tag">
+            <span class="tag">Gmail</span><span class="tag">Google Calendar</span><span class="tag">GDrive</span><span class="tag">WhatsApp</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div>
+            <h3>Finance & Analytics</h3>
+            <p style="font-size:0.875rem; color:var(--muted);">Rekap invoice, ekstraksi data transaksi, dan pengiriman invoice otomatis.</p>
+          </div>
+          <div class="tools-tag">
+            <span class="tag">GSheets</span><span class="tag">GDrive</span><span class="tag">Gmail</span><span class="tag">WhatsApp</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div>
+            <h3>Sales, Marketing & Concierge</h3>
+            <p style="font-size:0.875rem; color:var(--muted);">Kualifikasi prospect, analitik iklan, sinkronisasi CRM, & WhatsApp Lobby.</p>
+          </div>
+          <div class="tools-tag">
+            <span class="tag">Meta/TikTok</span><span class="tag">LinkedIn</span><span class="tag">Analytics</span><span class="tag">CRM</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. INTERACTIVE SIMULATION -->
+    <section class="card">
+      <div class="sim-header">
+        <div class="card-title" style="margin:0;">💬 Live AI Agent Simulation</div>
+        <span style="font-size:0.8rem; color:var(--muted);">Pilih skenario use-case:</span>
+      </div>
+      <div class="scenarios">
+        <button class="scen-btn active" onclick="runSim('hrd', this)">HRD: Schedule Interview</button>
+        <button class="scen-btn" onclick="runSim('finance', this)">Finance: Process Invoice</button>
+        <button class="scen-btn" onclick="runSim('sales', this)">Sales: Lead Qualification</button>
+      </div>
+      <div class="chat-box" id="chatBox"></div>
+    </section>
+
+    <!-- 5. FOOTER & CTA FORM -->
+    <section class="card">
+      <div class="card-title">📬 Konsultasi & Hubungi Boxy Verse</div>
+      <p style="font-size:0.875rem; color:var(--muted); margin-bottom:16px;">Isi formulir di bawah ini untuk mendiskusikan kebutuhan Karyawan Digital di perusahaan Anda.</p>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" placeholder="Masukkan nama Anda" required />
+          </div>
+          <div class="form-group">
+            <label>Email Perusahaan</label>
+            <input type="email" placeholder="nama@perusahaan.com" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nomor Telepon / WhatsApp</label>
+            <input type="tel" placeholder="+62 812 3456 7890" required />
+          </div>
+          <div class="form-group">
+            <label>Nama Perusahaan</label>
+            <input type="text" placeholder="PT Sukses Indonesia" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Pesan / Kebutuhan Otomasi</label>
+          <textarea rows="3" placeholder="Ceritakan alur kerja yang ingin Anda otomasikan..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Kirim Form Konsultasi</button>
+      </form>
+      <footer>
+        Built with AI · AI Builder Bootcamp Showcase
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    const scenariosData = {
+      hrd: {
+        user: "Bantu jadwalkan interview untuk kandidat UI/UX Designer besok jam 10 pagi.",
+        ai: "Siap! Saya telah mengecek Google Calendar yang kosong di jam 10:00 WIB, membuat link Google Meet, dan mengirimi email & WhatsApp konfirmasi ke kandidat."
+      },
+      finance: {
+        user: "Tolong rekap invoice masuk dari Gmail minggu ini ke Google Sheets.",
+        ai: "Berhasil! 12 invoice telah diekstrak ke GSheets 'Rekap Finance Q4' dan PDF terarsip di Google Drive."
+      },
+      sales: {
+        user: "Ada lead baru masuk dari WhatsApp Concierge Lobby. Tolong kualifikasi.",
+        ai: "Prospek PT Maju Jaya berminat pada paket Enterprise. Data telah dicatat ke CRM dan jadwal konsultasi otomatis ditambahkan."
+      }
+    };
+
+    function runSim(key, btn) {
+      document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      const box = document.getElementById('chatBox');
+      const item = scenariosData[key];
+      box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+      setTimeout(() => {
+        box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai"><b>Boxy Verse:</b> ${item.ai}</div>`;
+      }, 900);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert("Terima kasih! Pesan Anda telah terkirim. Tim Boxy Verse akan segera menghubungi Anda.");
+      e.target.reset();
+    }
+
+    // Default simulation on load
+    runSim('hrd', document.querySelector('.scen-btn'));
+  </script>
+</body>
+</html>
