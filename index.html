@@ -61,7 +61,16 @@
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-    /* 5. Form & Footer */
+    /* 5. Supabase Places Table */
+    .table-container { overflow-x: auto; margin-top: 12px; }
+    table#places { width: 100%; border-collapse: collapse; font-size: 0.875rem; text-align: left; }
+    table#places th, table#places td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table#places th { background: #f1f5f9; color: var(--text); font-weight: 700; }
+    table#places tbody tr:hover { background: #f8fafc; }
+    table#places a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    table#places a:hover { text-decoration: underline; }
+
+    /* 6. Form & Footer */
     .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
@@ -75,7 +84,7 @@
 </head>
 <body>
   <div class="container">
-    <!-- 1. HERO SECTION -->
+    <!-- HERO SECTION -->
     <header class="card hero">
       <div class="avatar">❖</div>
       <div class="badge"><span class="pulse"></span> Status: Active & Ready 24/7</div>
@@ -83,7 +92,7 @@
       <p class="tagline">"Tim digital yang bekerja, supaya tim Anda bisa berkembang."</p>
     </header>
 
-    <!-- 2. PROBLEM & SOLUTION CARD -->
+    <!-- PROBLEM & SOLUTION CARD -->
     <section class="grid-2">
       <div class="card chaos-card">
         <div class="card-title" style="color:var(--danger)">⚠️ The Chaos</div>
@@ -103,7 +112,7 @@
       </div>
     </section>
 
-    <!-- 3. CORE CAPABILITIES -->
+    <!-- CORE CAPABILITIES -->
     <section class="card">
       <div class="card-title">⚡ Core Capabilities & Integrated Tools</div>
       <div class="grid-3" style="margin-top:12px;">
@@ -137,7 +146,7 @@
       </div>
     </section>
 
-    <!-- 4. INTERACTIVE SIMULATION -->
+    <!-- INTERACTIVE SIMULATION -->
     <section class="card">
       <div class="sim-header">
         <div class="card-title" style="margin:0;">💬 Live AI Agent Simulation</div>
@@ -151,7 +160,20 @@
       <div class="chat-box" id="chatBox"></div>
     </section>
 
-    <!-- 5. FOOTER & CTA FORM -->
+    <!-- SUPABASE PLACES DIRECTORY -->
+    <section class="card">
+      <div class="card-title">📍 Directory Places</div>
+      <div class="table-container">
+        <table id="places">
+          <thead>
+            <tr><th>Nama</th><th>Kategori</th><th>Rating</th><th>Review</th><th>Kota</th><th>Telepon</th><th>Maps</th></tr>
+          </thead>
+          <tbody><tr><td colspan="7">Memuat data...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FOOTER & CTA FORM -->
     <section class="card">
       <div class="card-title">📬 Konsultasi & Hubungi Boxy Verse</div>
       <p style="font-size:0.875rem; color:var(--muted); margin-bottom:16px;">Isi formulir di bawah ini untuk mendiskusikan kebutuhan Karyawan Digital di perusahaan Anda.</p>
@@ -189,40 +211,8 @@
   </div>
 
   <script>
+    /* Simulation Script */
     const scenariosData = {
       hrd: {
         user: "Bantu jadwalkan interview untuk kandidat UI/UX Designer besok jam 10 pagi.",
-        ai: "Siap! Saya telah mengecek Google Calendar yang kosong di jam 10:00 WIB, membuat link Google Meet, dan mengirimi email & WhatsApp konfirmasi ke kandidat."
-      },
-      finance: {
-        user: "Tolong rekap invoice masuk dari Gmail minggu ini ke Google Sheets.",
-        ai: "Berhasil! 12 invoice telah diekstrak ke GSheets 'Rekap Finance Q4' dan PDF terarsip di Google Drive."
-      },
-      sales: {
-        user: "Ada lead baru masuk dari WhatsApp Concierge Lobby. Tolong kualifikasi.",
-        ai: "Prospek PT Maju Jaya berminat pada paket Enterprise. Data telah dicatat ke CRM dan jadwal konsultasi otomatis ditambahkan."
-      }
-    };
-
-    function runSim(key, btn) {
-      document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
-      if(btn) btn.classList.add('active');
-      const box = document.getElementById('chatBox');
-      const item = scenariosData[key];
-      box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
-      setTimeout(() => {
-        box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai"><b>Boxy Verse:</b> ${item.ai}</div>`;
-      }, 900);
-    }
-
-    function handleSubmit(e) {
-      e.preventDefault();
-      alert("Terima kasih! Pesan Anda telah terkirim. Tim Boxy Verse akan segera menghubungi Anda.");
-      e.target.reset();
-    }
-
-    // Default simulation on load
-    runSim('hrd', document.querySelector('.scen-btn'));
-  </script>
-</body>
-</html>
+        ai: "Siap! Saya telah mengecek Google Calendar yang kosong di jam 10:00 WIB, membuat link Google Meet, dan mengirimi email & WhatsApp konfirmasi ke kandidat
