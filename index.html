@@ -215,4 +215,78 @@
     const scenariosData = {
       hrd: {
         user: "Bantu jadwalkan interview untuk kandidat UI/UX Designer besok jam 10 pagi.",
-        ai: "Siap! Saya telah mengecek Google Calendar yang kosong di jam 10:00 WIB, membuat link Google Meet, dan mengirimi email & WhatsApp konfirmasi ke kandidat
+        ai: "Siap! Saya telah mengecek Google Calendar yang kosong di jam 10:00 WIB, membuat link Google Meet, dan mengirimi email & WhatsApp konfirmasi ke kandidat."
+      },
+      finance: {
+        user: "Tolong rekap invoice masuk dari Gmail minggu ini ke Google Sheets.",
+        ai: "Berhasil! 12 invoice telah diekstrak ke GSheets 'Rekap Finance Q4' dan PDF terarsip di Google Drive."
+      },
+      sales: {
+        user: "Ada lead baru masuk dari WhatsApp Concierge Lobby. Tolong kualifikasi.",
+        ai: "Prospek PT Maju Jaya berminat pada paket Enterprise. Data telah dicatat ke CRM dan jadwal konsultasi otomatis ditambahkan."
+      }
+    };
+
+    function runSim(key, btn) {
+      document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      const box = document.getElementById('chatBox');
+      const item = scenariosData[key];
+      box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+      setTimeout(() => {
+        box.innerHTML = `<div class="msg user">${item.user}</div><div class="msg ai"><b>Boxy Verse:</b> ${item.ai}</div>`;
+      }, 900);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert("Terima kasih! Pesan Anda telah terkirim. Tim Boxy Verse akan segera menghubungi Anda.");
+      e.target.reset();
+    }
+
+    runSim('hrd', document.querySelector('.scen-btn'));
+
+    /* Supabase Load Script */
+    const SUPABASE_URL = 'https://ykvelahnnzcjilaqvvwr.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_269wfNWj__92z7y-x-dpzg_NIi38Bn2';
+
+    async function loadPlaces() {
+      const tbody = document.querySelector('#places tbody');
+      try {
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/places?select=*&order=reviews_count.desc.nullslast&limit=100',
+          { headers: { apikey: SUPABASE_KEY } }
+        );
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const rows = await res.json();
+
+        tbody.replaceChildren();
+        for (const p of rows) {
+          const tr = document.createElement('tr');
+          for (const v of [p.title, p.category_name, p.total_score, p.reviews_count, p.city, p.phone]) {
+            const td = document.createElement('td');
+            td.textContent = v ?? '-';
+            tr.appendChild(td);
+          }
+          const td = document.createElement('td');
+          if (p.url && p.url.startsWith('https://')) {
+            const a = document.createElement('a');
+            a.href = p.url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = 'Buka';
+            td.appendChild(a);
+          }
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+        }
+        if (!rows.length) tbody.innerHTML = '<tr><td colspan="7">Belum ada data.</td></tr>';
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="7">Gagal memuat data.</td></tr>';
+        console.error(e);
+      }
+    }
+    loadPlaces();
+  </script>
+</body>
+</html>
